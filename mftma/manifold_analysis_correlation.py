@@ -60,10 +60,13 @@ def manifold_analysis_corr(XtotT, kappa, n_t, t_vecs=None, n_reps=10):
     # Compute the max K 
     total = np.cumsum(np.square(SS)/np.sum(np.square(SS)))
     maxK = np.argmax([t if t < 0.95 else 0 for t in total]) + 11
-    
     # Solve problem with low P: https://github.com/schung039/neural_manifolds_replicaMFT/issues/5
-    if num_manifolds<9:
+    if num_manifolds==0:
         maxK = 0
+    elif num_manifolds<9:
+        maxK = np.argmax([t if t < 0.95 else 0 for t in total]) + 11
+    
+    
 
     # Compute the low rank structure
     norm_coeff, norm_coeff_vec, Proj, V1_mat, res_coeff, res_coeff0 = fun_FA(centers, maxK, 20000, n_reps)
